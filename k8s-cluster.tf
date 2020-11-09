@@ -17,8 +17,8 @@ locals {
 }
 
 resource "google_project_service" "k8s_cluster" {
-  count   = length(local.k8s_services)
-  service = local.k8s_services[count.index]
+  count                      = length(local.k8s_services)
+  service                    = local.k8s_services[count.index]
   disable_dependent_services = true
 }
 
@@ -34,7 +34,7 @@ resource "google_container_cluster" "circleci_cluster" {
   # default node pool and immediately delete it.
   # This is the recommended way to manage node pools with Terraform.
   remove_default_node_pool = true
-  initial_node_count = 1
+  initial_node_count       = 1
 
   # Setting an empty username and password explicitly disables basic auth
   master_auth {
@@ -51,14 +51,14 @@ resource "google_container_cluster" "circleci_cluster" {
 }
 
 resource "google_container_node_pool" "circleci_cluster_primary" {
-  name       = "primary"
-  location   = google_container_cluster.circleci_cluster.location
-  cluster    = google_container_cluster.circleci_cluster.name
-  
+  name     = "primary"
+  location = google_container_cluster.circleci_cluster.location
+  cluster  = google_container_cluster.circleci_cluster.name
+
   node_count = 1
 
   node_config {
-    machine_type      = "e2-standard-2"
+    machine_type = "e2-standard-2"
 
     oauth_scopes = [
       "https://www.googleapis.com/auth/devstorage.read_only",
